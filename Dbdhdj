@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Простая Тапалка</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    
+    #counter {
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    #coin {
+      width: 150px;
+      height: 150px;
+      background: gold;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(255,215,0,0.7);
+      transition: transform 0.1s;
+      user-select: none;
+    }
+    
+    #coin:active {
+      transform: scale(0.95);
+    }
+    
+    .tap-effect {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: ripple 1s linear forwards;
+    }
+    
+    @keyframes ripple {
+      to {
+        transform: scale(20);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="counter">Кликов: 0</div>
+  <div id="coin">ЖМИ!</div>
+
+  <script>
+    const coin = document.getElementById('coin');
+    const counter = document.getElementById('counter');
+    let score = 0;
+    
+    // Обработчик клика
+    coin.addEventListener('click', (e) => {
+      score++;
+      counter.textContent = `Кликов: ${score}`;
+      
+      // Эффект нажатия
+      coin.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        coin.style.transform = 'scale(1)';
+      }, 100);
+      
+      // Создаем эффект круга
+      const effect = document.createElement('div');
+      effect.className = 'tap-effect';
+      effect.style.left = `${e.clientX - coin.getBoundingClientRect().left}px`;
+      effect.style.top = `${e.clientY - coin.getBoundingClientRect().top}px`;
+      coin.appendChild(effect);
+      
+      // Удаляем эффект после анимации
+      setTimeout(() => {
+        effect.remove();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
